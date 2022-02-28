@@ -1,6 +1,4 @@
 from flask import Flask, request, Response
-import json
-import socket
 import requests
 app = Flask(__name__)
 
@@ -9,30 +7,30 @@ def welcome():
     return 'Hello!Welcome to Fibonacci Server!'
 
 
-def caluculate_fibonacci(number_x):
-    if number_x < 0:
+def caluculate_fibonacci(number):
+    if number < 0:
         print("Please enter a positive integer")
-    elif number_x == 0:
+    elif number == 0:
         return 0
-    elif number_x <= 2:
+    elif number <= 2:
         return 1
     else:
-        return caluculate_fibonacci(number_x - 1) + caluculate_fibonacci(number_x - 2)
+        return caluculate_fibonacci(number - 1) + caluculate_fibonacci(number - 2)
 
 
 @app.route('/fibonacci')
 def fibonacci():
-    number_x = int(request.args.get('number'))
-    if not number_x:
+    number = request.args.get('number')
+    if not number:
         return Response(status=400)
-    if not isinstance(number_x, int):
+    if not isinstance(number, int):
         return Response(status=400)
-    result = caluculate_fibonacci(number_x)
-    return Response(result, status=200)
+    result = caluculate_fibonacci(int(number))
+    return Response("the fibonacci for "+str(number)+" is: "+str(result), status = 200)
 
 
 
-@app.route('/register', methods = ["PUT"])
+@app.route('/register')
 def register():
     hostname = request.args.get('hostname')
     ip = '0.0.0.0'

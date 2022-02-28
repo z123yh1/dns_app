@@ -3,6 +3,9 @@ import os
 from flask import Flask, request, Response
 import json
 app = Flask(__name__)
+@app.route('/home')
+def welcome():
+    return 'Hello!Welcome to Authoritative Server!'
 
 @app.route('/', methods = ['GET', 'POST'])
 def initial():
@@ -21,10 +24,10 @@ def initial():
                 return Response(address, status=200)
     else:
         data_get = request.form
-        host_name = data_get['name']
-        ip_address = data_get['address']
+        hostname = data_get['name']
+        ip_address =data_get['address']
         dict = {}
-        dict[host_name] = ip_address
+        dict[hostname] = ip_address
         with open(file, 'w') as json_file:
             json.dump(dict, json_file)
         return Response("successfully registered", status=200)
@@ -33,4 +36,5 @@ def initial():
 app.run(host='0.0.0.0',
         port=53533,
         debug=True)
+
 
